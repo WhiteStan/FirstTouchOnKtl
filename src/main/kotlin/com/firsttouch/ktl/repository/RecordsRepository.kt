@@ -1,7 +1,7 @@
 package com.firsttouch.ktl.repository
 
-import generated.com.firsttouch.ktl.Tables
-import generated.com.firsttouch.ktl.tables.Record
+import com.firsttouch.ktl.Tables
+import com.firsttouch.ktl.tables.Record
 import org.jooq.DSLContext
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional

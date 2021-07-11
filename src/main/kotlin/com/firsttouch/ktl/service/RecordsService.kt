@@ -1,7 +1,7 @@
 package com.firsttouch.ktl.service
 
 import com.firsttouch.ktl.repository.RecordsRepository
-import generated.com.firsttouch.ktl.tables.Record
+import com.firsttouch.ktl.tables.Record
 import org.springframework.stereotype.Service
 
 @Service

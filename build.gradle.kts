@@ -69,8 +69,8 @@ jooq {
 						isFluentSetters = false
 					}
 					target.apply {
-						packageName = "generated.com.firsttouch.ktl"
-						directory = "src/main/kotlin/"
+						packageName = "com.firsttouch.ktl"
+						directory = "src/main/java/"
 					}
 					strategy.name = "org.jooq.codegen.DefaultGeneratorStrategy"
 				}
