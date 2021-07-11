@@ -6,9 +6,12 @@ package com.firsttouch.ktl;
 
 import com.firsttouch.ktl.tables.Address;
 import com.firsttouch.ktl.tables.Addresstorecord;
+import com.firsttouch.ktl.tables.Record;
+import com.firsttouch.ktl.tables.records.AddressRecord;
+import com.firsttouch.ktl.tables.records.AddresstorecordRecord;
+import com.firsttouch.ktl.tables.records.RecordRecord;
 
 import org.jooq.ForeignKey;
-import org.jooq.Record;
 import org.jooq.TableField;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
@@ -25,14 +28,14 @@ public class Keys {
     // UNIQUE and PRIMARY KEY definitions
     // -------------------------------------------------------------------------
 
-    public static final UniqueKey<Record> KEY_ADDRESS_PRIMARY = Internal.createUniqueKey(Address.ADDRESS, DSL.name("KEY_address_PRIMARY"), new TableField[] { Address.ADDRESS.ID }, true);
-    public static final UniqueKey<Record> KEY_ADDRESSTORECORD_PRIMARY = Internal.createUniqueKey(Addresstorecord.ADDRESSTORECORD, DSL.name("KEY_addresstorecord_PRIMARY"), new TableField[] { Addresstorecord.ADDRESSTORECORD.ID, Addresstorecord.ADDRESSTORECORD.RECORDID }, true);
-    public static final UniqueKey<Record> KEY_RECORD_PRIMARY = Internal.createUniqueKey(com.firsttouch.ktl.tables.Record.RECORD, DSL.name("KEY_record_PRIMARY"), new TableField[] { com.firsttouch.ktl.tables.Record.RECORD.ID }, true);
+    public static final UniqueKey<AddressRecord> KEY_ADDRESS_PRIMARY = Internal.createUniqueKey(Address.ADDRESS, DSL.name("KEY_address_PRIMARY"), new TableField[] { Address.ADDRESS.ID }, true);
+    public static final UniqueKey<AddresstorecordRecord> KEY_ADDRESSTORECORD_PRIMARY = Internal.createUniqueKey(Addresstorecord.ADDRESSTORECORD, DSL.name("KEY_addresstorecord_PRIMARY"), new TableField[] { Addresstorecord.ADDRESSTORECORD.ID, Addresstorecord.ADDRESSTORECORD.RECORDID }, true);
+    public static final UniqueKey<RecordRecord> KEY_RECORD_PRIMARY = Internal.createUniqueKey(Record.RECORD, DSL.name("KEY_record_PRIMARY"), new TableField[] { Record.RECORD.ID }, true);
 
     // -------------------------------------------------------------------------
     // FOREIGN KEY definitions
     // -------------------------------------------------------------------------
 
-    public static final ForeignKey<Record, Record> ADDRESS = Internal.createForeignKey(Addresstorecord.ADDRESSTORECORD, DSL.name("address"), new TableField[] { Addresstorecord.ADDRESSTORECORD.ADDRESSID }, Keys.KEY_ADDRESS_PRIMARY, new TableField[] { Address.ADDRESS.ID }, true);
-    public static final ForeignKey<Record, Record> RECORD = Internal.createForeignKey(Addresstorecord.ADDRESSTORECORD, DSL.name("record"), new TableField[] { Addresstorecord.ADDRESSTORECORD.RECORDID }, Keys.KEY_RECORD_PRIMARY, new TableField[] { com.firsttouch.ktl.tables.Record.RECORD.ID }, true);
+    public static final ForeignKey<AddresstorecordRecord, AddressRecord> ADDRESS = Internal.createForeignKey(Addresstorecord.ADDRESSTORECORD, DSL.name("address"), new TableField[] { Addresstorecord.ADDRESSTORECORD.ADDRESSID }, Keys.KEY_ADDRESS_PRIMARY, new TableField[] { Address.ADDRESS.ID }, true);
+    public static final ForeignKey<AddresstorecordRecord, RecordRecord> RECORD = Internal.createForeignKey(Addresstorecord.ADDRESSTORECORD, DSL.name("record"), new TableField[] { Addresstorecord.ADDRESSTORECORD.RECORDID }, Keys.KEY_RECORD_PRIMARY, new TableField[] { Record.RECORD.ID }, true);
 }

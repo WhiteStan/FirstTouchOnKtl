@@ -21,7 +21,6 @@ apply(plugin = "nu.studer.jooq")
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-jooq")
-	implementation("org.springframework.boot:spring-boot-starter-mustache")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -61,12 +60,19 @@ jooq {
 					name = "org.jooq.codegen.DefaultGenerator"
 					database.apply {
 						inputSchema = "app"
+						name = "org.jooq.meta.mysql.MySQLDatabase"
 					}
 					generate.apply {
+						isRelations = true
 						isDeprecated = false
-						isRecords = false
-						isImmutablePojos = false
-						isFluentSetters = false
+						isRecords = true
+						isDaos = false
+						isImmutablePojos = true
+						isFluentSetters = true
+						isJavaTimeTypes = false
+						isJpaAnnotations = false
+						isValidationAnnotations = false
+						isSpringAnnotations = false
 					}
 					target.apply {
 						packageName = "com.firsttouch.ktl"
