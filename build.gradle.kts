@@ -57,7 +57,7 @@ jooq {
 					password = "root"
 				}
 				generator.apply {
-					name = "org.jooq.codegen.DefaultGenerator"
+					name = "org.jooq.codegen.KotlinGenerator"
 					database.apply {
 						inputSchema = "app"
 						name = "org.jooq.meta.mysql.MySQLDatabase"
@@ -68,7 +68,7 @@ jooq {
 						isRecords = true
 						isDaos = false
 						isImmutablePojos = true
-						isFluentSetters = true
+						isFluentSetters = false
 						isJavaTimeTypes = false
 						isJpaAnnotations = false
 						isValidationAnnotations = false
@@ -76,9 +76,11 @@ jooq {
 					}
 					target.apply {
 						packageName = "com.firsttouch.ktl"
-						directory = "src/main/java/"
+						directory = "src/main/generated/"
 					}
-					strategy.name = "org.jooq.codegen.DefaultGeneratorStrategy"
+					strategy.apply {
+						name = "org.jooq.codegen.DefaultGeneratorStrategy"
+					}
 				}
 			}
 		}
