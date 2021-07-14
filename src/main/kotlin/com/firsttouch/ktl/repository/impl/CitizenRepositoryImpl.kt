@@ -24,11 +24,23 @@ class RecordsRepositoryImpl(private val dsl: DSLContext) : CitizenRepository {
             }
             .firstOrNull()
 
-    override fun insert(citizen: CitizenRecord) =
+    override fun findByMajorFields(citizen: CitizenDTO): List<CitizenDTO>? = dsl.select()
+            .from(CITIZEN)
+            .where(CITIZEN.FIRSTNAME.eq(citizen.firstName)
+                    .and(CITIZEN.LASTNAME.eq(citizen.lastName))
+                    .and(CITIZEN.PHONE.eq(citizen.phone)))
+            .fetch()
+            .map {
+                it.toCitizenDTO()
+            }
+
+    override fun insert(citizen: CitizenDTO) =
             dsl.insertInto(CITIZEN)
-                    .set(citizen)
+                    .set(CITIZEN.FIRSTNAME, citizen.firstName)
+                    .set(CITIZEN.LASTNAME, citizen.lastName)
+                    .set(CITIZEN.PHONE, citizen.phone)
                     .execute()
-                    .let { citizen.id?.let { it1 -> findById(it1) } }
+                    .let { findByMajorFields(citizen)?.firstOrNull() }
 
     override fun update(citizenDto: CitizenDTO) =
             dsl.update(CITIZEN)
@@ -38,4 +50,16 @@ class RecordsRepositoryImpl(private val dsl: DSLContext) : CitizenRepository {
                     .where(CITIZEN.ID.eq(citizenDto.id))
                     .execute()
                     .let { citizenDto.id?.let { it1 -> findById(it1) } }
+
+    override fun remove(id: Int) {
+        dsl.delete(CITIZEN)
+                .where(CITIZEN.ID.eq(id))
+                .execute()
+    }
+
+    override fun removeAll() {
+        findAll().forEach {
+            it.id?.let { it1 -> remove(it1) }
+        }
+    }
 }
