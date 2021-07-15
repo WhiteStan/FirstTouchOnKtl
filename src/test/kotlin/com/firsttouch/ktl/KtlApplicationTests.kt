@@ -28,7 +28,7 @@ class KtlApplicationTests {
 	fun tearDown() = citizenRepository.removeAll()
 
 	@Test
-	fun `test that service saves and returns saved citizen`() {
+	fun `test that service saves new citizen`() {
 		val addedCitizenResponse = client.postForEntity<CitizenDTO>(URI("/v1/citizens"),
 				CitizenDTO(firstName = "testFirstName", lastName = "testLastName", phone = "testPhone"),
 				CitizenDTO::class.java)
@@ -37,54 +37,61 @@ class KtlApplicationTests {
 		assertNotNull(addedCitizenResponse.body)
 		assertEquals(HttpStatus.OK, addedCitizenResponse.statusCode)
 
-		val returnedCitizenResponse = client.getForEntity("v1/citizens/{${addedCitizenResponse.body?.id}}",
+		val savedCitizen = citizenRepository.findById(addedCitizenResponse.body?.id!!)
+
+		assertNotNull(savedCitizen)
+		assertEquals(addedCitizenResponse.body, savedCitizen)
+	}
+
+	@Test
+	fun `test that service returns saved citizen`() {
+		val savedCitizen = citizenRepository.insert(CitizenDTO(firstName = "testFirstName", lastName = "testLastName", phone = "testPhone"))
+
+		assertNotNull(savedCitizen)
+
+		val id = savedCitizen?.id
+
+		val returnedCitizenResponse = client.getForEntity("/v1/citizens/$id",
 				CitizenDTO::class.java)
 
 		assertNotNull(returnedCitizenResponse)
+		assertEquals(HttpStatus.OK, returnedCitizenResponse.statusCode)
 		assertNotNull(returnedCitizenResponse.body)
-		assertEquals(addedCitizenResponse.body, returnedCitizenResponse.body)
+		assertEquals(savedCitizen, returnedCitizenResponse.body)
 	}
 
 	@Test
 	fun `test that service removes citizen`() {
-		val addedCitizenResponse = client.postForEntity(URI("/v1/citizens"),
-				CitizenDTO(firstName = "testFirstName", lastName = "testLastName", phone = "testPhone"),
-				CitizenDTO::class.java)
+		val savedCitizen = citizenRepository.insert(CitizenDTO(firstName = "testFirstName", lastName = "testLastName", phone = "testPhone"))
 
-		assertNotNull(addedCitizenResponse)
-		assertNotNull(addedCitizenResponse.body)
-		assertEquals(HttpStatus.OK, addedCitizenResponse.statusCode)
+		assertNotNull(savedCitizen)
 
-		client.delete(URI("/v1/citizens/{${addedCitizenResponse.body?.id}}"))
+		val id = savedCitizen?.id
 
-		val returnedCitizenResponse = client.getForEntity("v1/citizens/{${addedCitizenResponse.body?.id}}",
-				CitizenDTO::class.java)
+		client.delete(URI("/v1/citizens/$id"))
 
-		assertNotNull(returnedCitizenResponse)
-		assertNull(returnedCitizenResponse.body)
-		assertEquals(HttpStatus.OK, returnedCitizenResponse.statusCode)
+		val savedCitizenAfterDeletion = citizenRepository.findById(id!!)
+
+		assertNull(savedCitizenAfterDeletion)
 	}
 
 	@Test
 	fun `test that service updates citizen`() {
-		val addedCitizenResponse = client.postForEntity(URI("/v1/citizens"),
-				CitizenDTO(firstName = "testFirstName", lastName = "testLastName", phone = "testPhone"),
-				CitizenDTO::class.java)
+		val savedCitizen = citizenRepository.insert(CitizenDTO(firstName = "testFirstName", lastName = "testLastName", phone = "testPhone"))
 
-		assertNotNull(addedCitizenResponse)
-		assertNotNull(addedCitizenResponse.body)
-		assertEquals(HttpStatus.OK, addedCitizenResponse.statusCode)
+		assertNotNull(savedCitizen)
 
-		val updatedCitizen = addedCitizenResponse.body?.copy(firstName = "newName")
+		val id = savedCitizen?.id
 
-		client.put("/v1/citizens", updatedCitizen)
+		val updatedCitizenRequest = savedCitizen?.copy(firstName = "newName")
 
-		val returnedCitizenResponse = client.getForEntity("v1/citizens/{${addedCitizenResponse.body?.id}}",
-				CitizenDTO::class.java)
+		val updatedCitizenResponse = client.put("/v1/citizens", updatedCitizenRequest)
+
+		assertNotNull(updatedCitizenResponse)
+
+		val returnedCitizenResponse = citizenRepository.findById(id!!)
 
 		assertNotNull(returnedCitizenResponse)
-		assertNotNull(returnedCitizenResponse.body)
-		assertEquals(HttpStatus.OK, returnedCitizenResponse.statusCode)
-		assertEquals(addedCitizenResponse.body, updatedCitizen)
+		assertEquals(returnedCitizenResponse, updatedCitizenRequest)
 	}
 }

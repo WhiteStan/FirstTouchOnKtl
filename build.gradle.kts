@@ -52,7 +52,7 @@ jooq {
 				logging = org.jooq.meta.jaxb.Logging.WARN
 				jdbc.apply {
 					driver = "com.mysql.cj.jdbc.Driver"
-					url = "jdbc:mysql://localhost:3306/app?useSSL=false"
+					url = "jdbc:mysql://localhost:3306/app?allowPublicKeyRetrieval=true&useSSL=false"
 					user = "root"
 					password = "root"
 				}
