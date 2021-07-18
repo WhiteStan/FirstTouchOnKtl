@@ -7,13 +7,13 @@ import org.springframework.stereotype.Service
 
 @Service
 class CitizenServiceImpl(private val repository: CitizenRepository) : CitizenService {
-    override fun findAll(): List<CitizenDTO> = repository.findAll()
+    override suspend fun findAll(): List<CitizenDTO> = repository.findAll()
 
-    override fun findById(id: Int): CitizenDTO? = repository.findById(id)
+    override suspend fun findById(id: Int): CitizenDTO? = repository.findById(id)
 
-    override fun insert(citizenDto: CitizenDTO): CitizenDTO? = repository.insert(citizenDto)
+    override suspend fun insert(citizenDto: CitizenDTO): CitizenDTO? = repository.insert(citizenDto)
 
-    override fun update(citizenDto: CitizenDTO): CitizenDTO? = repository.update(citizenDto)
+    override suspend fun update(citizenDto: CitizenDTO): CitizenDTO? = repository.update(citizenDto)
 
-    override fun delete(id: Int) = repository.remove(id)
+    override suspend fun delete(id: Int) = repository.remove(id)
 }

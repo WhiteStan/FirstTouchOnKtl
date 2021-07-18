@@ -3,9 +3,9 @@ package com.firsttouch.ktl.service
 import com.firsttouch.ktl.model.CitizenDTO
 
 interface CitizenService {
-    fun findAll(): List<CitizenDTO>
-    fun findById(id: Int): CitizenDTO?
-    fun insert(citizenDto: CitizenDTO): CitizenDTO?
-    fun update(citizenDto: CitizenDTO): CitizenDTO?
-    fun delete(id: Int)
+    suspend fun findAll(): List<CitizenDTO>
+    suspend fun findById(id: Int): CitizenDTO?
+    suspend fun insert(citizenDto: CitizenDTO): CitizenDTO?
+    suspend fun update(citizenDto: CitizenDTO): CitizenDTO?
+    suspend fun delete(id: Int)
 }

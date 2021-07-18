@@ -9,17 +9,17 @@ import org.springframework.web.bind.annotation.*
 class ApplicationRestController (private val citizenService: CitizenService) {
 
     @GetMapping
-    fun findAll() = citizenService.findAll()
+    suspend fun findAll() = citizenService.findAll()
 
     @GetMapping("/{id}")
-    fun findById(@PathVariable id: Int) = citizenService.findById(id)
+    suspend fun findById(@PathVariable id: Int) = citizenService.findById(id)
 
     @PostMapping
-    fun insert(@RequestBody req: CitizenDTO) :CitizenDTO? = citizenService.insert(req)
+    suspend fun insert(@RequestBody req: CitizenDTO) :CitizenDTO? = citizenService.insert(req)
 
     @PutMapping
-    fun update(@RequestBody req: CitizenDTO) = citizenService.update(req)
+    suspend fun update(@RequestBody req: CitizenDTO) = citizenService.update(req)
 
     @DeleteMapping("/{id}")
-    fun delete(@PathVariable id: Int) = citizenService.delete(id)
+    suspend fun delete(@PathVariable id: Int) = citizenService.delete(id)
 }
